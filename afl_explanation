@@ -26,7 +26,8 @@ Essendon misses three key playres that offer 12.5 points per game, with one of t
 Finally, in other leagues scoring is up, less defence players probably afraid of injuries due to covid, so defences are not tough, if this holds in the long run for the AFL the impact migt not be evident in one game, but we can make a sligth judgmental adjustemtn to suggest that Essendon's defence will suffer more due to the absence of their start player, and Collingwood's rusty offence might take advantage of that.
 
 Combining all this information I conclude with a point forecast of 26 for the margin of victory, with a confidence interval of
-[-13, 65]80%. I could have risked a bit by increasing the lower bound closer to zero, but in the previous season Essendon won by 15 and since I don't have any knowledge on the game I will keep it as it is.
+[-13, 65]80%. I could have risked a bit by increasing the lower bound closer to zero, but in the previous season Essendon won by 15 and since I don't have any knowledge on the game, I will keep it as it is.
+The code (not well organised) for this forecast can be found at: https://github.com/petestylianos/5550_assignment1
 
 
 
