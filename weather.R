@@ -173,7 +173,9 @@ all_time_max_min_april %>%
 # Thus  point forecast : 21.5 , 
 # 80 CI [14.3 - 29]
 
-## Now let's see if we can use any models base on the book
+
+
+## Now let's see if we can use any models basec on the book
 
 weather %>% 
   filter(month(Date) == 04) %>% 
@@ -186,19 +188,157 @@ weather %>%
 # First I will train a SNAIVE, ETS, Holt's Dumped Ets, and 
 # a combined model to see how well they perform
 
+## I will trasnform the max_temperature using box_cox to avoid negative CI's
+
+lambda <- weather %>%
+  features(max_temperature, features = guerrero) 
+
+lambda
+
+
 fit <-  weather %>% 
   filter(year(Date) >= 1973, # some gaps appear in the data before so we exclude them 
          year(Date) < 2014) %>%  # hold last 6 years out to see how well the model performs
-  model(snaive = SNAIVE(max_temperature),
-        ets = ETS(max_temperature ~ error('A') + trend('A') + season('A')),
-        holt_ets = ETS(max_temperature ~ error('A') + trend('Ad') + season('A')),
-        
-        )
+  model(snaive = SNAIVE(box_cox(max_temperature, lambda)),
+        ets = ETS(box_cox(max_temperature, lambda) ~ error('A') + trend('A') + season('A')),
+        holt_ets = ETS(box_cox(max_temperature, lambda) ~ error('A') + trend('Ad') + season('A')),
+        ) %>% 
+  mutate(comb = (snaive + ets + holt_ets)/3)
 
-fit %>% 
-  forecast(h = 40) %>% 
+
+
+forecasted_weather <- fit %>% 
+  forecast::forecast(h = 2626) # days after 2014 in our data
+
+# Let's see which model is more accurate
+
+forecasted_weather %>% 
+  accuracy(data = weather,
+           measures = list(crps = CRPS, rmse = RMSE))
+
+## Holt's ETS model provides both a better distributional and point forecast.
+
+## Let's visualise the model predictions
+
+forecasted_weather %>% 
+  autoplot(lwd = 3) + 
+  autolayer(weather, color = 'grey', alpha = 0.3) +
+  facet_wrap(~.model, scales = 'free_y') 
+
+
+## Let's visualise how they perform specifically in april
+
+forecasted_weather %>% 
+  filter(month(Date) == 04) %>% 
+  autoplot()  +
+  autolayer(weather %>% filter(month(Date) == 04), color = 'grey', alpha = 0.3) +
+  facet_wrap(~.model, scales = 'free_y') 
+
+## The snaive model produces extremely large CI's
+
+
+# Let's combine the real values and the predicted
+real_vs_forecast <- forecasted_weather %>% 
   hilo() %>% 
-  filter(Date == '2021-04-12')
+  inner_join(weather %>% select(max_temperature), 
+             by = 'Date')
+
+real_vs_forecast <- real_vs_forecast %>% 
+  rename(predi_distr = max_temperature.x,
+         max_temp_actual = max_temperature.y,
+         max_temp_forecast = .mean)
+
+tidy_forecast <- real_vs_forecast %>% 
+  as_tibble() %>% 
+  select(Date, max_temp_forecast, max_temp_actual) %>% 
+  pivot_longer(
+    cols = -Date, 
+    names_to = 'Measurement',
+    values_to = 'Temperature') 
+
+
+tidy_forecast %>%  
+  ggplot(aes(Date, Temperature, color = Measurement)) +
+  geom_line()
+
+## Our point forecast seems to neglect lower values
+
+# let's see how well it performs in April
+
+tidy_forecast %>% 
+  filter(month(Date) == 04) %>% 
+  ggplot(aes(Date, Temperature, color = Measurement)) +
+  geom_line()
+
+## Again the point forecast is off in colder days.
+  
+## And finally how well it performs on our day of interest
+
+tidy_forecast %>% 
+  filter(month(Date) == 04,
+         day(Date) == 12) %>% 
+  ggplot(aes(Date, Temperature, color = Measurement)) +
+  geom_line()
+
+
+# As wee see the past 6 years are colder than what our model predicted
+
+
+# let's see if the 80 CI captures all the volatility for our dat of interest
 
 
   
+
+tidy_forecast  %>% 
+  filter(month(Date) == 04, day(Date) == 12) %>%
+  hilo() 
+  View()
+
+  
+############  
+
+Predictions
+  
+  
+  future_fit <-  weather %>% 
+    filter(year(Date) >= 1973) %>%  # some gaps appear in the data before so we exclude them 
+    model(
+      holt_ets = ETS(box_cox(max_temperature, lambda) ~ error('A') + trend('Ad') + season('A'))
+    )
+
+  
+  
+forecasted_weather_april <- future_fit %>% 
+    forecast::forecast(h = 49) # days after 2014 in our data
+  
+  
+forecasted_weather_april %>% 
+  filter(month(Date) == 04, day(Date) == 12) %>% 
+  hilo(c( 60, 70, 80))
+
+
+forecasted_weather_april %>% 
+  autoplot(color = 'red') +
+  autolayer(weather, max_temperature)
+
+
+
+
+
+# max_all_time min_all_time
+# <dbl>        <dbl>
+#   1         34.5         11.7
+
+
+# holt_ets  
+#23.4 
+#[15.79395, 29.87698]60 
+#[14.8807, 32.80911]70 
+#[13.84853, 37.22497]80
+
+
+# Thus  point forecast : 21.5 , 
+# 80 CI [14.3 - 29]
+
+ 
+
