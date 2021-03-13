@@ -1,0 +1,41 @@
+## Weather Forecast
+
+Initialy I loaded the data about the maximum temperature in R and performed some EDA.
+I used gg_season() to identidy any patterns for April. Between 1970 and 2020 
+the highest maximum temperature in April was 34.5 and the
+lowesr maximum temperature in
+April was 11.7.
+Furthermore, I plotted the distrubution of the daily maximim temperature for every decade in the dataset, and derived that the mean was around 20 for all 5 decades. The disributions wers normal with a little right skew.
+Based on the assumption of normally disributed data for the maximum temperature in Aprli, I calcluated the mean and the appropriate 80% confidence intervals, but they were very narrow, so I decided to use a different approach. I
+assumed that within all days in April the values of maximum temperatue are uniformly distributed. As so, for every year in the dataset I calculated the highest maximum temperature in April was and the
+lowest maximum temperature in
+April. These two distributions were also approximately normal with small skew. Based on that I re-calculated the mean and the 80% confidence intervals for each distribution. Accordingly, I approximated the point forecast as the mean of the mean of the maximum temperatures distribution and the mean of the lowest maximum temperatures.
+And for the confidence interval I included the lowest quantile from the lowest temperaturs distribution and the upper quantile from the maximum temperatures distribution.
+The point forecast was set to 21.5 degrees and the CI to [14.3 - 29.0]80%.
+
+Moving one I also decided to attempt to fit some exponential smoothing models to take into advantage the seasonality and trend in the data. I used a box_cox transformation in the maximum temperature, to make sure that the prediction intervals would be positive, and then I modeled the maximum temperature using a seasonal naive method a simple exponential smoothing method('A', 'A', 'A), a Damped Holt's method ('A', 'Ad', 'A)
+and a compination of all three methods.
+After fitting the models in the test set that witheld data from 2014-2020, I measured the accuracy of the models and determined that the Damped Holt's method produced better distributional and point forecast. As so I used only this method to forecast the future values. This model suggested a point forecast of
+23.4 and a CI of [13.84853, 37.22497]80.
+The point forecasts and the lower CI of my two aproaches 
+are close but the upper CI from the ETS model is even higher than the all time maximum temperature in April.
+I wasn't aware how I should properly combine these forecasts, so using a little judgement, I concluded in a point forecast of: 22.6
+and a confidence interval of
+[13.84853 - 30.9]80%.
+Code (not well organised) for this forecast can be found at: https://github.com/petestylianos/5550_assignment1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
