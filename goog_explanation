@@ -1,15 +1,14 @@
 ## Google forecast
 
-This time series can't be accurately estimated as we don't understand all the factors that contribute to the volatiliy and the forecasts can affect the thing we are trying to forecast.
+This time series can't be accurately estimated as we don't understand all the factors that contribute to the volatility and the forecasts can affect the thing we are trying to forecast.
 
-The price of Google depends on fiance fundamentals, such as the valuation of the company and the
-expectations for furure values of the company. By plotting the data we see an upward 'trend' although it can not be accurately called a trend, because in that case everyone will knew that the stock will rise and would have botted. The upward 'trend' is more of a positive momentum due to good valuations of the company. Obviously, this time-sereis doesn't have any seasonality. Some specific dates do stand out however, specifically the quarterly earnings. It is common for a stock to gain in value if the sales exceeded the expectations, although it is not certain.
+The price of Google depends on finance fundamentals, such as the valuation of the company and the
+expectations for the future value of the company. By plotting the data we see an upward 'trend' although it can not be accurately called a trend because in that case, everyone would know that the stock will rise and would have bought it. The upward 'trend' is more of a positive momentum due to the good valuations of the company. This time-series doesn't have any seasonality. Some specific dates do stand out. Specifically the quarterly earnings. It is common for a stock to gain in value if the sales exceeded the expectations, although it is not certain.
 
+For this time series, it is common to perform technical analysis, by looking at the time-series every 5 to 15 minutes and daily. However, the patterns are unluckily to hold in the long run.
+I used this approach, based on some previous knowledge. Mostly looking at key indicators such as MACD(moving average convergence/divergence). 
 
-For this time series it is common to perform technical analysis, by looking at the time-series every 5 to 15 minutes and daily. However, the patterns are unluckily to hold in the long run.
-I used this approach, based on some previous knowledge. Mostly looking at key indicators sucs as MACD(moving average convergence/divergence). 
-The stock has not been very volatile sicne February and hasn't break the main channels of resistance and suppport. The revenue and the EPS on February exceeded the expectations and the stock reached $2000. For the predicton on 22 March 2021, since the stock the past month hasn't 
-experienced major ups or downs, a naive forecast or a random walk with a drift might be our best cases. The the forecast on 24 May 2021 is much harder since much things can happen until then, along with the fact that Google will announce the next earnings by then.
-I will base the confidence intervals for this forecast on ressistance and support levels on the hourly chart.
+The stock has not been very volatile since February and hasn't broken the main channels of resistance and support. The revenue and the EPS in February exceeded the expectations and the stock reached $2000. For the prediction on 22 March 2021, since the stock hasn't experienced major ups or downs in the past month, a naive forecast or a random walk with a drift might be our best guess. The forecast on 24 May 2021 is much harder since many things can happen until then, along with the fact that Google will announce the next earnings by then.
+I will base the confidence intervals for this forecast on resistance and support levels on the hourly chart.
 
-Combining the elemntary technical analysis with the random walk modal and an ETS model I derived at a point forecast for March of 2070 with a confidence interval of [2007.132, 2170.125]80. And for May a point forecast of 2091 with aconfidence interval of [1882, 2200].
+Combining the elementary technical analysis with the random walk modal and an ETS model I derived a point forecast for March of 2070 with a confidence interval of [1950.132, 2170.125]80. And for May a point forecast of 2091 with a confidence interval of [1882, 2300]80.
