@@ -1,0 +1,32 @@
+# AFL forecast
+
+
+My first thought for this problem was that it can't be modeled usign time-series, since the roster of the teams can change substantialy between years. Consequently, data for any previous matches between the two teams of maximum more than a decade old are not particularly useful. However, a time-series of the maring of victory might be useful to obtain information on how close these two teams are in terms of performance. If one is significantly better than the other a wide margin would be expected. After, looking at the teams history (I am completely unaware of how this game is played, and I stil haven't figured out why goals are multiplied by 6), I noticed that in the past 10 years on average Collingwood outperforms Essendon by at least 4 places in the standings at the end of the year. So this might indicate that the game will end with a positive margin for Collingwood. I used the fitzRoy package to obtain data about AFL and performed some EDA.
+Using the past 10 years, I calculate the max, min, and mean points and margin for the games played with Collingwood as a Home Team. Those would be an idication on what my prediction should on average caputre. The mean margin of victory is +25.1 and the upper and lower bound this years has been, [-37, 79]. Also after ploting the histogram of margin, we see that it follows a normal distribution, se we can calculate
+the 80% intervals, but these takes into consideration the past data which are not relevant. Also, from the data after 2010 the mean margin of victory for Collingwood at home is 25.1 while for Essendon only 3.25, indicating that Collingwood has a better team. The plot of the Margin time-series didn't reveal much, but the p-value of the ljung_box suggested that the time-series is not white noise.
+To get a sense of what a model would predicte I used a simple ETS model in order to capure the trend. It suggested a point forecast of 16 and [-33.63004, 65.59687]80, which seem to capture the current condition of the teams.
+Plots for Average points per game both at home and away indicated a decreasing trend for both teams after 2000, which might be a sign of both teams performing poorly in offence. At the same time. Collingwood's average points per game consided decreased after 2000, indicating that the team performs bettet in defence. For Essendon the average points per game against when playin away saw a positive trend, indicating that their defence is also worrying.
+
+
+I decided to break the initial problem of calcilating the margin (Mt) to, Mt = PCt - PEt, where PCt is the points that Collingwood will score and PEt the points that Essendon will score. Which in turn can be broken down to, Mt = PCt - PEt = (GCt * 6 + BCt) -(GEt 8 * 6 + BEt),
+with Gt, representign the goals and Bt the behinds that each team will score. Which can be further broken down by saying that
+Gt equals the sum of the goal that each player on the team will score and simillarly with behinds.
+Although, this approach complicates the prblem from estimating the margin, to estimating the goals and behinds that each player will score, it enables us to use much more available data on the average goals and behinds fot the playes in the team.
+Also our forecast will be influenced by team-level statistics such as the Average goals, behinds and points that each team scores and allows, in home and away games in the past seasons, together with their head to head results.
+ 
+ 
+Finally, I used betting odds found in betting sites in an attempt to reverse engineer the problem, and extrapolate the Margin based on  various odds given in Collingwood and Essendon upcoming matches.
+I looked at the odds to win the championship to derive an estimate on how good both teams are. 
+Collingwood is ranked 7th and Esenndon 14th in the most favourite teams to win. So there is a clear gap betwwen a playoff the two teams. A playoff team vs an outside, without Collingwood however being the most difficult opponent for Essendon. By looking the available odds for games of teams comparable to Collingwood and Essendon, I extrapolated the odds for our match-up of interest. The margins with the lowest odds are between 13-36 in favorite of Collingwood. Which captures my poing forecast. A win for Essendon up to 12 goals is more unluckily than a win for Collingwood up to 12 goals. With the odds of a win of Essendon with more than 13 goals being the same as the odds for a win of Collingwood up to 60 points.
+
+Finally, a proper spors analysis contains an injury report. Collingwood misses only one key player, which offers 7 points per game, while
+Essendon misses three key playres that offer 12.5 points per game, with one of them being their best defender, thus also leaving a gap in their defence.
+
+
+Finally, in other leagues scoring is up, less defence players probably afraid of injuries due to covid, so defences are not tough, if this holds in the long run for the AFL the impact migt not be evident in one game, but we can make a sligth judgmental adjustemtn to suggest that Essendon's defence will suffer more due to the absence of their start player, and Collingwood's rusty offence might take advantage of that.
+
+Combining all this information I conclude with a point forecast of 26 for the margin of victory, with a confidence interval of
+[-13, 65]80%. I could have risked a bit by increasing the lower bound closer to zero, but in the previous season Essendon won by 15 and since I don't have any knowledge on the game I will keep it as it is.
+
+
+
