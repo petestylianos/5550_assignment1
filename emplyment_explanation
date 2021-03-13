@@ -1,0 +1,21 @@
+## Employment Forecast
+
+For this forecast, I obtained the data from the Australian Bureau of Statistics. (Both seasonaly adjusted  and  not adjusted)
+The seasonaly adjusted data showed a highly increasing trend and the impact of COVID-19 seemed to eclipse, since the total employed(seasonaly adjusted) of Jan-21 was close to that of Nov-19. 
+The ranged from 1970 to 2021, so firstly I grouped them by decade and obtain the minimum, maximum, and mean levels of employmed people in April, to get some sence of the confidence intervals and their progression by decade.
+
+Using gg_season and gg_subseries I observed a slight increase in April values after 2000 except for 2020, were the total employed value dropepd significantly. 
+
+I decided to try to model both the adjusted and the unadjusted data to compare the estimates, and to exploit the seasonality of the later.
+
+Both the nominal and the differenced values of the time sereis showased strong autocoleration with past values, especially in lag 12.
+
+I decided to experiment by fitting Exponential smoothing models with multiplicative seasonality for the not-adjusted data and with no seasonality for the adjusted data. Furthermore, to exploit the high corellation between the lagged values of the time-series I attempted to fit some Arima models, based on the textbook(although I had trouble choosing the tuning parameters). Finally, for the not adjusted data, I tried to use prophet model (mostly out of curiosity). For the seasonaly adjusted data the arima model performed exceptionally well, outperforming the prophet and the ETS methods.
+
+After training ther models, withholding values between 2013-2018, the measurements of accuracy showed that the arima model, performed better.
+Based on that I forecasetd the seasonally adjusted estimate of total employment for April 2021 to be 12920109 and the confidence interval
+[12818954, 13056068]80.
+
+I am not very confident on my estimate based on the fact that I couldn't think of how to adjust the time-series forecast based on the impact of COVID-19.
+
+The code (not well organised) for this forecast can be found at: https://github.com/petestylianos/5550_assignment1
